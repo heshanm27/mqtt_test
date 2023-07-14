@@ -1,10 +1,81 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
 
 void main() {
-  runApp(const MyApp());
+  // final WebSocketLink webSocketLink = WebSocketLink(
+  //   'ws://localhost:8080/graphql',
+  // );
+  //
+  // ValueNotifier<GraphQLClient> client = ValueNotifier(
+  //   GraphQLClient(
+  //     link: webSocketLink,
+  //     // The default store is the InMemoryStore, which does NOT persist to disk
+  //     cache: GraphQLCache(store: HiveStore()),
+  //   ),
+  // );
+  //
+  //
+  //
+  // // Register a listener for WebSocket messages
+  // webSocketLink.stream.listen((message) {
+  //   // Handle the incoming message
+  //   print('Received WebSocket message: $message');
+  // });
+  listenToMessage();
+  runApp(MyApp());
+}
+
+Future<void> listenToMessage() async {
+  /// Create the WebSocket channel
+     final jsonData = {
+       "host": "wujlhsdysnhlziirgt4cxnxzwe.appsync-api.us-east-1.amazonaws.com",
+      "x-api-key": "da2-zf2obptsifhvhcbscu6cc5tzwa"
+    };
+
+    final jsonString = json.encode(jsonData);
+    final base64String = base64.encode(utf8.encode(jsonString));
+    final payload = {};
+    final payloadString = json.encode(payload);
+    final payloadBase64 = base64.encode(utf8.encode(payloadString));
+  final channel =  WebSocketChannel.connect(
+    Uri.parse('wss://wujlhsdysnhlziirgt4cxnxzwe.appsync-realtime-api.us-east-1.amazonaws.com/graphql?header=${base64String}&payload=${payloadBase64}'),
+    protocols: ['graphql-ws'],
+  );
+
+  // channel.sink.add(
+  //   jsonEncode(
+  //     {
+  //       "type": "subscribe",
+  //       "channels": [
+  //         {
+  //           "name": "ticker",
+  //           "product_ids": [
+  //             "BTC-EUR",
+  //           ]
+  //         }
+  //       ]
+  //     },
+  //   ),
+  // );
+  //    channel.stream.first.then((_) {
+  //      print('WebSocket connected');
+  //    });
+  /// Listen for all incoming data
+  channel.stream.listen(
+        (data) {
+      print(data);
+
+    },
+    onError: (error) => print(error),
+  );
 }
 
 class MyApp extends StatelessWidget {
+  // final ValueNotifier<GraphQLClient>? client;
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -13,21 +84,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
