@@ -46,21 +46,23 @@ Future<void> listenToMessage() async {
     protocols: ['graphql-ws'],
   );
 
-  // channel.sink.add(
-  //   jsonEncode(
-  //     {
-  //       "type": "subscribe",
-  //       "channels": [
-  //         {
-  //           "name": "ticker",
-  //           "product_ids": [
-  //             "BTC-EUR",
-  //           ]
-  //         }
-  //       ]
-  //     },
-  //   ),
-  // );
+  channel.sink.add(
+    jsonEncode(
+        {
+          "id": "key-cf23-4cb8-9fcb-152ae4fd1e69",
+          "payload": {
+            "data": "{\"query\":\"subscription SubscribeToData {\\n  subscribe(name: \\\"channel\\\") {\\n    name\\n    data\\n  }\\n}\",\"variables\":{}}",
+            "extensions": {
+              "authorization": {
+                "x-api-key": "da2-zf2obptsifhvhcbscu6cc5tzwa",
+                "host": "wujlhsdysnhlziirgt4cxnxzwe.appsync-api.us-east-1.amazonaws.com"
+              }
+            }
+          },
+          "type": "start"
+        }
+    ),
+  );
   //    channel.stream.first.then((_) {
   //      print('WebSocket connected');
   //    });
