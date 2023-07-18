@@ -31,9 +31,10 @@ void main() {
 
 Future<void> listenToMessage() async {
   /// Create the WebSocket channel
+  ///
      final jsonData = {
        "host": "wujlhsdysnhlziirgt4cxnxzwe.appsync-api.us-east-1.amazonaws.com",
-      "x-api-key": "da2-zf2obptsifhvhcbscu6cc5tzwa"
+       "Authorization": "16op3cla8snjg19acd4r477krk54tsvf28c46sok63riso9pmlvv"
     };
 
     final jsonString = json.encode(jsonData);
